@@ -1,0 +1,45 @@
+{
+  "variables": {
+    "name": "on-prem-builder-0.1.1-centos-7.5-x86_64",
+    "source_ami": "ami-ee6a718a",
+    "ssh_keypair_name": "<your_ssh_keypair_name>",
+    "ssh_private_key_file": "<path_to_ssh_private_key",
+    "ssh_username": "centos"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "ami_name": "{{user `name`}}",
+      "region": "{{user `region`}}",
+      "source_ami": "{{user `source_ami`}}",
+      "instance_type": "t2.medium",
+      "communicator": "ssh",
+      "ssh_keypair_name": "{{user `ssh_keypair_name`}}",
+      "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "run_tags":{"Name":"packer-image"}
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "build_scripts/provision_on_prem_builder.sh",
+      "destination": "/tmp/provision_on_prem_builder.sh"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_pass`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
+      "inline_shebang": "/bin/sh -x",
+      "skip_clean": true,
+      "environment_vars": [
+        "HOME_DIR=/home/vagrant"
+      ],
+      "inline": [
+        "yum update -y",
+        "mv /tmp/provision_on_prem_builder.sh /usr/local/bin/provision_on_prem_builder.sh",
+        "chmod +x /usr/local/bin/provision_on_prem_builder.sh",
+        "/usr/local/bin/provision_on_prem_builder.sh"
+      ]
+    }
+  ]
+}

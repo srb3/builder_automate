@@ -1,0 +1,7 @@
+terraform/.terraform/*
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/terraform.tfvars
+terraform/scripts/t_*
+terraform/scripts/*.cert
+get_creds.sh

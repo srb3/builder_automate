@@ -1,0 +1,27 @@
+#--------------------------------------------------------------
+# Variables
+#--------------------------------------------------------------
+aws_region = ""              # your aws region
+aws_profile = ""             # your aws profile
+aws_region_name = ""         # your region name
+aws_key_pair_file = ""       # your ssh private key file
+aws_key_pair_name = ""       # your aws ssh key pair name
+aws_image_user = ""          # the ssh user for the image
+tag_dept = ""                # e.g. success
+tag_customer = ""            # e.g. mycustomer
+tag_project = ""             # e.g. compliance
+tag_application = ""         # e.g. demo
+tag_contact = ""             # your chef email
+tag_ttl = ""                 # time to live
+a2_heap_size = ""            # automate 2 jvm heap size
+a2_admin_password = ""       # automate 2 admin password
+automate_image_owner_id = "" # owner id of the automate 2 image
+automate_image_name = ""     # name of the automate 2 image
+builder_image_owner_id = ""  # owner id of the builder image
+builder_image_name = ""      # name of the builder image
+automate_dns_name = ""       # route 53 name for the  automate instance
+builder_dns_name = ""        # route 53 dns name for the builder instance
+automate_license_path = ""   # path to an automatemate 2 license
+oauth_id = ""                # oauth_id string
+oauth_secret = ""            # oauth_secret string
+zone_name = ""               # an existing route 53 public hosted zone name

@@ -1,0 +1,47 @@
+{
+  "variables": {
+    "name": "chefautomate-2-latest-centos-7.5-x86_64",
+    "source_ami": "ami-ee6a718a",
+    "script_base": "build_scripts",
+    "script_dest": "/tmp",
+    "script_name": "provision_a2_centos.sh",
+    "ssh_keypair_name": "<your_ssh_keypair_name>",
+    "ssh_private_key_file": "<path_to_ssh_private_key",
+    "ssh_username": "centos"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "ami_name": "{{user `name`}}",
+      "region": "{{user `region`}}",
+      "source_ami": "{{user `source_ami`}}",
+      "instance_type": "t2.medium",
+      "communicator": "ssh",
+      "ssh_keypair_name": "{{user `ssh_keypair_name`}}",
+      "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "run_tags":{"Name":"packer-image"}
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "{{user `script_base`}}/{{user `script_name`}}",
+      "destination": "{{user `script_dest`}}/{{user `script_name`}}"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_pass`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
+      "inline_shebang": "/bin/sh -x",
+      "skip_clean": true,
+      "environment_vars": [
+        "HOME_DIR=/home/packer"
+      ],
+      "inline": [
+        "chmod +x {{user `script_dest`}}/{{user `script_name`}}",
+        "sed -i 's/\r//' {{user `script_dest`}}/{{user `script_name`}}",
+        "{{user `script_dest`}}/{{user `script_name`}}"
+      ]
+    }
+  ]
+}
